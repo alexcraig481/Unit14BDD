@@ -57,7 +57,7 @@ def program_ends(session):
 # Rule: Year and Month of Birth must be in respective acceptable range
 
 # Both acceptable
-@scenario("../features/calculator.feature", "User enters numerical year and month in respective acceptable range")
+@scenario("../features/calculator.feature", "Numerical year and month in respective acceptable range")
 def test_acceptable_range():
     pass
 
@@ -93,7 +93,7 @@ def retirement_calc_runs(session):
 
 
 # Year not acceptable
-@scenario("../features/calculator.feature", "User enters a year outside of the acceptable range")
+@scenario("../features/calculator.feature", "Numerical year of birth outside of the acceptable range")
 def test_out_of_range_year():
     pass
 
@@ -125,7 +125,7 @@ def exception_raised(submit_data):
 #######################################################################################
 
 # Month not acceptable
-@scenario("../features/calculator.feature", "User enters a month outside of the acceptable range")
+@scenario("../features/calculator.feature", "Numerical birth month outside of the acceptable range")
 def test_out_of_range_month():
     pass
 
@@ -157,12 +157,11 @@ def exception_raised(submit_data):
 
 ###############################################################
 
-# Rule Year and Month of Birth entries must successfully convert to integers
+# Rule: User input for year and month of birth must successfully convert to integers
 
-# Both convert
-@scenario("../features/calculator.feature", "User enters characters for year and month"
-                                            " that can be converted to integers")
-def test_user_input_conversion():
+# Year can be converted
+@scenario("../features/calculator.feature", "Year input can convert to an integer")
+def test_year_convert():
     pass
 
 
@@ -173,13 +172,8 @@ def session():
 
 
 @given("the user enters characters for the birth year that can be converted to an integer")
-def convertable_year(session):
+def valid_year(session):
     session.year_prompt_response = "4444"
-
-
-@given("the user enters characters for the birth month that can be converted to an integer")
-def convertable_month(session):
-    session.month_prompt_response = "88"
 
 
 @when("the user submits the data", target_fixture="submit_data")
@@ -187,16 +181,142 @@ def submit_data(session):
     try:
         session.user_calculation.set_year(session.year_prompt_response)
     except ValueError as err:
-        year_err = str(err)
+        return str(err)
+
+    
+@then("the entry for year can proceed to be checked against the acceptable range")
+def range_check(submit_data):
+    assert submit_data == "Year entered outside acceptable range"
+
+
+################################################################
+
+# Year can NOT be converted
+
+@scenario("../features/calculator.feature", "Year input cannot convert to an integer")
+def test_year_convert_fail():
+    pass
+
+
+# Fixture
+@pytest.fixture
+def session():
+    return Calculator()
+
+
+@given("the user enters characters for the year that cannot be converted to an integer")
+def invalid_year(session):
+    session.year_prompt_response = "4OO"
+
+
+@when("the user submits the data", target_fixture="submit_data")
+def submit_data(session):
+    try:
+        session.user_calculation.set_year(session.year_prompt_response)
+    except ValueError as err:
+        return str(err)
+
+
+@then("an exception will be raised")
+def range_check(submit_data):
+    assert "invalid literal for int() " in submit_data
+
+
+##################################################################
+
+# Month can be converted
+@scenario("../features/calculator.feature", "Month input can convert to an integer")
+def test_month_convert():
+    pass
+
+
+# Fixture
+@pytest.fixture
+def session():
+    return Calculator()
+
+
+@given("the user enters characters for the birth month that can be converted to an integer")
+def valid_month(session):
+    session.month_prompt_response = "13"
+
+
+@when("the user submits the data", target_fixture="submit_data")
+def submit_data(session):
     try:
         session.user_calculation.set_month(session.month_prompt_response)
     except ValueError as err:
-        month_err = str(err)
-    return month_err, year_err
+        return str(err)
 
 
-@then("the entries can proceed to be checked against their respective acceptable range")
-def proceed_to_range_check(submit_data):
-    month_err, year_err = submit_data
-    assert month_err == "Month entered outside acceptable range"
-    assert year_err == "Year entered outside acceptable range"
+@then("the entry for month can proceed to be checked against the acceptable range")
+def range_check(submit_data):
+    assert submit_data == "Month entered outside acceptable range"
+
+
+###############################################################
+
+# Month can NOT be converted
+@scenario("../features/calculator.feature", "Month input cannot convert to an integer")
+def test_month_convert_fail():
+    pass
+
+
+# Fixture
+@pytest.fixture
+def session():
+    return Calculator()
+
+
+@given("the user enters characters for the month that cannot be converted to an integer")
+def invalid_month(session):
+    session.month_prompt_response = "l0"
+
+
+@when("the user submits the data", target_fixture="submit_data")
+def submit_data(session):
+    try:
+        session.user_calculation.set_month(session.month_prompt_response)
+    except ValueError as err:
+        return str(err)
+                                                                                     
+
+@then("an exception will be raised")
+def range_check(submit_data):
+    assert "invalid literal for int() " in submit_data
+
+###############################################################
+
+# Rule: Accurate Social Security full benefit eligibility age and date will be displayed
+
+
+@scenario("../features/calculator.feature", "Accurate age and date are displayed after input submitted")
+def test_accurate_results():
+    pass
+
+
+# Fixture
+@pytest.fixture
+def session():
+    return Calculator()
+
+
+@given("the user has submitted an acceptable year of birth")
+def acceptable_year(session):
+    session.year_prompt_response = "1954"
+
+
+@given("the user has submitted an acceptable month of birth")
+def acceptable_month(session):
+    session.month_prompt_response = "8"
+
+
+@when("the user submits the data")
+def data_submit(session):
+    session.user_calculation.set_year(session.year_prompt_response)
+    session.user_calculation.set_month(session.month_prompt_response)
+
+    
+@then("the eligibility age and date will be displayed")
+def check_results():
+    pass

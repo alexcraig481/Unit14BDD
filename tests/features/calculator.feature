@@ -20,20 +20,20 @@ Feature:Retirement Calculation
 # Rule: Year and Month of Birth must be in respective acceptable range
 
 # Both in range
-  Scenario: User enters numerical year and month in respective acceptable range
+  Scenario: Numerical year and month in respective acceptable range
     Given the user enters a year in acceptable range
     And the user enters a month in acceptable range
     When the user submits the data
     Then the retirement calculation will start
 
 # Year out of range
-  Scenario: User enters a year outside of the acceptable range
+  Scenario: Numerical year of birth outside of the acceptable range
     Given the user enters a year outside of the acceptable range
     When the user submits the data
     Then an exception will be raised
 
 # Month out of range
-  Scenario: User enters a month outside of the acceptable range
+  Scenario: Numerical birth month outside of the acceptable range
     Given the user enters a month outside of the acceptable range
     When the user submits the data
     Then an exception will be raised
@@ -41,9 +41,33 @@ Feature:Retirement Calculation
 
 # Rule: Year and Month of Birth entries must successfully convert to integers
 
-# Both convert
-  Scenario: User enters characters for year and month that can be converted to integers
+# Year can convert
+  Scenario: Year input can convert to an integer
     Given the user enters characters for the birth year that can be converted to an integer
-    And the user enters characters for the birth month that can be converted to an integer
     When the user submits the data
-    Then the entries can proceed to be checked against their respective acceptable range
+    Then the entry for year can proceed to be checked against the acceptable range
+
+# Year can not convert
+  Scenario: Year input cannot convert to an integer
+    Given the user enters characters for the year that cannot be converted to an integer
+    When the user submits the data
+    Then an exception will be raised
+
+# Month can convert
+  Scenario: Month input can convert to an integer
+    Given the user enters characters for the birth month that can be converted to an integer
+    When the user submits the data
+    Then the entry for month can proceed to be checked against the acceptable range
+
+# Month can not convert
+  Scenario: Month input cannot convert to an integer
+    Given the user enters characters for the month that cannot be converted to an integer
+    When the user submits the data
+    Then an exception will be raised
+
+# Rule: Accurate Social Security full benefit eligibility age and date will be displayed
+  Scenario: Accurate age and date are displayed after input submitted
+    Given the user has submitted an acceptable year of birth
+    And the user has submitted an acceptable month of birth
+    When the user submits the data
+    Then the eligibility age and date will be displayed

@@ -6,11 +6,13 @@ class RetireCalculation:
         self._month = 0
 
     def set_year(self, year):
+        print("year being set", year)
         year = int(year)
         if 1900 <= year <= 2021:
             self._year = year
             print("year set", self._year)
         else:
+            print(year)
             raise ValueError("Year entered outside acceptable range")
 
     def set_month(self, month):

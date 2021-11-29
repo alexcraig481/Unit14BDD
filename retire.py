@@ -11,7 +11,7 @@ class RetireCalculation:
             self._year = year
             print("year set", self._year)
         else:
-            print("error")
+            raise ValueError("Year entered outside acceptable range")
 
     def set_month(self, month):
         month = int(month)
@@ -19,7 +19,7 @@ class RetireCalculation:
             self._month = month
             print("month set", self._month)
         else:
-            print("error")
+            raise ValueError("Month entered outside acceptable range")
 
     def run_calculation(self):
         self

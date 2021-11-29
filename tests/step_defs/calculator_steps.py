@@ -303,7 +303,7 @@ def session():
 
 @given("the user has submitted an acceptable year of birth")
 def acceptable_year(session):
-    session.year_prompt_response = "1954"
+    session.year_prompt_response = "1955"
 
 
 @given("the user has submitted an acceptable month of birth")
@@ -318,5 +318,9 @@ def data_submit(session):
 
     
 @then("the eligibility age and date will be displayed")
-def check_results():
-    pass
+def check_results(session):
+    retirement_year, retirement_month, age_years, age_month = session.user_calculation.calculate_retirement()
+    assert age_years == 66
+    assert age_month == 2
+    assert retirement_year == 2021
+    assert retirement_month == 10

@@ -23,7 +23,7 @@ class Calculator:
             print(self.user_calculation.run_calculation())
 
     def get_birth_year(self):
-        year = input("Enter your year of birth: ")
+        year = input("Enter your year of birth or press Enter to exit: ")
         self.year_prompt_response = year
 
     def get_birth_month(self):
